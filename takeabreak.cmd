@@ -72,7 +72,7 @@ set /a numtime=pomodorotime + 1
 set pomodorotime=%numtime%
 
 @echo Starting loop number %pomodorotime%
-timeout /nobreak 5
+timeout /nobreak 1500
 start "" cmd /wait /c "echo End of loop&echo Please take a break&echo This window will automically close in 10 seconds&timeout 30& exit"
 
 if %pomodorotime% == 4 (goto POMODOROEND) else (goto POMODOROCHOICE)
