@@ -8,8 +8,8 @@ cls
 set time=
 set realtime=
 set choice=
-set secondToHour = 3600
-set secondToMinute = 60
+set secondToHour=3600
+set secondToMinute=60
 
 setlocal enabledelayedexpansion
 set /p time=Enter time (second) or choose pre-defined time: ^
@@ -39,25 +39,48 @@ Invalid input! Please re-enter time ^
 		
 		goto WRONGINPUT
 	)
-	if !time! LEQ 0 (
-		@echo ^
-
-Invalid time! Please re-enter time ^ 
-
-		
-		goto WRONGINPUT
-	)
-	if !time! GTR 9999 (
-		@echo ^
-
-Invalid time! Please re-enter time ^ 
-
-		
-		goto WRONGINPUT
-	)
 )
 
+if !time! LEQ 0 (
+		@echo ^
+
+Invalid time! Please re-enter time ^ 
+
+		
+		goto WRONGINPUT
+	)
+if !time! GTR 9999 (
+		@echo ^
+
+Invalid time! Please re-enter time ^ 
+
+		
+		goto WRONGINPUT
+	)
+
 set realtime=%time%
+
+rem set default hour and minute value
+set hour=0
+set minute=0
+if !time! GEQ 3600 (
+	set /a hour=%time%/%secondToHour%
+
+	set /a time -= !hour!*%secondToHour%
+
+	set /a minute=!time!/%secondToMinute%
+
+	set /a time -= !minute!*%secondToMinute%
+) else (
+	set /a minute=!time!/%secondToMinute%
+)
+
+rem Weird script to add hour and minute to current time
+for /f "tokens=1*" %%A in ('
+  powershell -NoP -C "(Get-Date).AddMinutes(!minute!).AddHours(!hour!).ToString('yyyy/MM/dd HH:mm:ss')"
+') do (
+  set "AddedTime=%%B"
+)
 
 if "%time%" == "1" (set realtime=1800)
 if "%time%" == "2" (set realtime=2700)
@@ -66,7 +89,7 @@ if "%time%" == "4" (set realtime=5400)
 if "%time%" == "5" (set realtime=7200)
 if "%time%" == "6" (goto POMODOROSTART)
 
-@echo Computer will enter hibernate after !realtime! seconds
+@echo Computer will enter hibernate at %AddedTime%, in !hour! hour(s), !minute! minute(s) and !time! second(s)
 
 timeout /nobreak !realtime!
 
