@@ -3,6 +3,8 @@
 :YESOPTION
 
 cls
+
+:WRONGINPUT
 set time=
 set realtime=
 set choice=
@@ -24,6 +26,19 @@ set /p time=Enter time (second) or choose pre-defined time: ^
 
 Your selection: 
 
+set /a Test=time
+
+if !Test! EQU 0 (
+	if !time! NEQ 0 (
+		@echo ^
+
+Invalid input! Please re-enter time ^ 
+
+		
+		goto WRONGINPUT
+	)
+)
+
 set realtime=%time%
 
 if "%time%" == "1" (set realtime=1800)
@@ -37,7 +52,7 @@ if "%time%" == "6" (goto POMODOROSTART)
 
 timeout /nobreak !realtime!
 
-shutdown -h
+
 
 set /p choice=Continue using[Y/N]?
 
