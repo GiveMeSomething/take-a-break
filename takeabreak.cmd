@@ -8,6 +8,8 @@ cls
 set time=
 set realtime=
 set choice=
+set secondToHour = 3600
+set secondToMinute = 60
 
 setlocal enabledelayedexpansion
 set /p time=Enter time (second) or choose pre-defined time: ^
@@ -33,6 +35,22 @@ if !Test! EQU 0 (
 		@echo ^
 
 Invalid input! Please re-enter time ^ 
+
+		
+		goto WRONGINPUT
+	)
+	if !time! LEQ 0 (
+		@echo ^
+
+Invalid time! Please re-enter time ^ 
+
+		
+		goto WRONGINPUT
+	)
+	if !time! GTR 9999 (
+		@echo ^
+
+Invalid time! Please re-enter time ^ 
 
 		
 		goto WRONGINPUT
