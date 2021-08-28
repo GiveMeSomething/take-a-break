@@ -1,9 +1,11 @@
 @echo off
 
+rem This will be run when user want to continue using
 :YESOPTION
 
 cls
 
+rem This will be run when user enter wrong/invalid time
 :WRONGINPUT
 set time=
 set realtime=
@@ -11,7 +13,10 @@ set choice=
 set secondToHour=3600
 set secondToMinute=60
 
+rem This option will make the var in block () to be use outside. Mostly for 'set' command for-loop and if statements 
 setlocal enabledelayedexpansion
+
+rem Begin of the script
 set /p time=Enter time (second) or choose pre-defined time: ^
 
 1. 30' ^
@@ -28,8 +33,8 @@ set /p time=Enter time (second) or choose pre-defined time: ^
 
 Your selection: 
 
+rem set time to arithmetic type, if the time is text then the value is '0'
 set /a Test=time
-
 if !Test! EQU 0 (
 	if !time! NEQ 0 (
 		@echo ^
@@ -41,6 +46,7 @@ Invalid input! Please re-enter time ^
 	)
 )
 
+rem Check for out-of-bound value. 'timeout' command accept from 0-9999 (I excluded 0)
 if !time! LEQ 0 (
 		@echo ^
 
@@ -63,6 +69,8 @@ set realtime=%time%
 rem set default hour and minute value
 set hour=0
 set minute=0
+
+rem If the time is greater than 3600 (1 hour) then set time and minute, else set only minute
 if !time! GEQ 3600 (
 	set /a hour=%time%/%secondToHour%
 
@@ -75,7 +83,7 @@ if !time! GEQ 3600 (
 	set /a minute=!time!/%secondToMinute%
 )
 
-rem Weird script to add hour and minute to current time
+rem Weird script to add hour and minute to current time. Will look into it later!!!
 for /f "tokens=1*" %%A in ('
   powershell -NoP -C "(Get-Date).AddMinutes(!minute!).AddHours(!hour!).ToString('yyyy/MM/dd HH:mm:ss')"
 ') do (
@@ -93,8 +101,9 @@ if "%time%" == "6" (goto POMODOROSTART)
 
 timeout /nobreak !realtime!
 
+shutdown -h
 
-
+rem Ask the user if the script should continue
 set /p choice=Continue using[Y/N]?
 
 if "%choice%" == "Y" (goto YESOPTION)
@@ -102,7 +111,11 @@ if "%choice%" == "y" (goto YESOPTION)
 
 if "%choice%" == "N" (goto NOOPTION)
 if "%choice%" == "n" (goto NOOPTION)
-
+else(
+	@echo ^
+	
+Invalid input! Please enter 'Y' or 'N'.^
+)
 goto END
 
 :NOOPTION
@@ -112,6 +125,7 @@ This scripts will shutdown in 5 seconds
 timeout /nobreak 5
 exit
 
+rem Pomodoro feature. Will develop later
 :POMODOROSTART
 @echo ^
 
