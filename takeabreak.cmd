@@ -104,6 +104,7 @@ timeout /nobreak !realtime!
 shutdown -h
 
 rem Ask the user if the script should continue
+:ASKCONTINUE
 set /p choice=Continue using[Y/N]?
 
 if "%choice%" == "Y" (goto YESOPTION)
@@ -115,7 +116,12 @@ else(
 	@echo ^
 	
 Invalid input! Please enter 'Y' or 'N'.^
+
+
+	goto ASKCONTINUE
 )
+
+rem Fallback option
 goto END
 
 :NOOPTION
