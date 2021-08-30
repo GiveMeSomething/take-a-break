@@ -29,7 +29,7 @@ set /p time=Enter time (second) or choose pre-defined time: ^
 
 5. 2h ^
 
-6. Pomodoro (experimental) ^
+6. Pomodoro (under-development) ^
 
 Your selection: 
 
@@ -66,6 +66,14 @@ Invalid time! Please re-enter time ^
 
 set realtime=%time%
 
+if "%time%" == "1" (set realtime=1800)
+if "%time%" == "2" (set realtime=2700)
+if "%time%" == "3" (set realtime=3600)
+if "%time%" == "4" (set realtime=5400)
+if "%time%" == "5" (set realtime=7200)
+
+set time=!realtime!
+
 rem set default hour and minute value
 set hour=0
 set minute=0
@@ -81,6 +89,8 @@ if !time! GEQ 3600 (
 	set /a time -= !minute!*%secondToMinute%
 ) else (
 	set /a minute=!time!/%secondToMinute%
+
+	set /a time -= !minute!*%secondToMinute%
 )
 
 rem Weird script to add hour and minute to current time. Will look into it later!!!
@@ -90,18 +100,11 @@ for /f "tokens=1*" %%A in ('
   set "AddedTime=%%B"
 )
 
-if "%time%" == "1" (set realtime=1800)
-if "%time%" == "2" (set realtime=2700)
-if "%time%" == "3" (set realtime=3600)
-if "%time%" == "4" (set realtime=5400)
-if "%time%" == "5" (set realtime=7200)
-if "%time%" == "6" (goto POMODOROSTART)
-
 @echo Computer will enter hibernate at %AddedTime%, in !hour! hour(s), !minute! minute(s) and !time! second(s)
 
 timeout /nobreak !realtime!
 
-shutdown -h
+
 
 rem Ask the user if the script should continue
 :ASKCONTINUE
@@ -118,7 +121,7 @@ else(
 Invalid input! Please enter 'Y' or 'N'.^
 
 
-	goto ASKCONTINUE
+	goto ASKCONTINUEgit a
 )
 
 rem Fallback option
