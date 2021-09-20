@@ -104,7 +104,7 @@ for /f "tokens=1*" %%A in ('
 
 timeout /nobreak !realtime!
 
-rundll32.exe user32.dll,LockWorkStation
+shutdown -h
 
 rem Ask the user if the script should continue
 :ASKCONTINUE
