@@ -15,3 +15,6 @@ Currently experiment with Windows lock feature instead of hibernating
     - Save the time wasted in starting the PC
 
   - Sleep probably the best option and I am looking for a way to implement it
+
+
+Future plan: Add config options to exchange between lock/hibernate(/sleep?)
