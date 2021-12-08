@@ -37,8 +37,8 @@ Your selection:
 
 rem set time to arithmetic type, if the time is text then the value is '0'
 
-set /a Test=%time%
-if !Test! EQU 0 (
+set /a test=%time%
+if !test! EQU 0 (
 	if !time! NEQ 0 (
 		@echo ^
 
@@ -58,7 +58,8 @@ Invalid time! Please re-enter time ^
 
 		
 		goto WRONGINPUT
-	)
+)
+
 if !time! GTR 9999 (
 		@echo ^
 
@@ -66,7 +67,7 @@ Invalid time! Please re-enter time ^
 
 		
 		goto WRONGINPUT
-	)
+)
 
 set /a time=%time%
 
@@ -91,23 +92,33 @@ if "%time%" == "5" (
 	goto NOTIMEOPTION
 )
 
+goto TIMEOPTION
+
 :TIMEOPTION
 
-set /p timeoption=Enter time options [M]inute | [S]econd (Default)
+set /p timeoption="Enter time options [M]inute | [S]econd(Default): "
 
 if "%timeoption%" == "M" (
-	set multiplier=3600
+	set multiplier=60
 
-	@echo Time now calculate in minute
+	@echo Time now calculate in MINUTE
 )
 if "%timeoption%" == "m" (
-	set multiplier=3600
+	set multiplier=60
+
+	@echo Time now calculate in MINUTE
+) else (
+
+	@echo Time now calculate in SECOND
+
 )
 
-:NOTIMEOPTION
-
+set /a timevalue = %time%
 set /a realtime=%time%*%multiplier%
 
+goto NOTIMEOPTION
+
+:NOTIMEOPTION
 
 set time=!realtime!
 
@@ -151,8 +162,7 @@ if "%choice%" == "Y" (goto YESOPTION)
 if "%choice%" == "y" (goto YESOPTION)
 
 if "%choice%" == "N" (goto NOOPTION)
-if "%choice%" == "n" (goto NOOPTION)
-else(
+if "%choice%" == "n" (goto NOOPTION) else (
 	@echo ^
 	
 Invalid input! Please enter 'Y' or 'N'.^
