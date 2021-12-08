@@ -8,6 +8,8 @@ cls
 rem This will be run when user enter wrong/invalid time
 :WRONGINPUT
 set time=
+set timeoption=
+set multiplier=1
 set realtime=
 set choice=
 set secondToHour=3600
@@ -34,17 +36,19 @@ set /p time=Enter time (second) or choose pre-defined time: ^
 Your selection: 
 
 rem set time to arithmetic type, if the time is text then the value is '0'
-set /a Test=time
+
+set /a Test=%time%
 if !Test! EQU 0 (
 	if !time! NEQ 0 (
 		@echo ^
 
 Invalid input! Please re-enter time ^ 
 
-		
+
 		goto WRONGINPUT
 	)
 )
+
 
 rem Check for out-of-bound value. 'timeout' command accept from 0-9999 (I excluded 0)
 if !time! LEQ 0 (
@@ -64,13 +68,46 @@ Invalid time! Please re-enter time ^
 		goto WRONGINPUT
 	)
 
-set realtime=%time%
+set /a time=%time%
 
-if "%time%" == "1" (set realtime=1800)
-if "%time%" == "2" (set realtime=2700)
-if "%time%" == "3" (set realtime=3600)
-if "%time%" == "4" (set realtime=5400)
-if "%time%" == "5" (set realtime=7200)
+if "%time%" == "1" (
+	set realtime=1800
+	goto NOTIMEOPTION
+)
+if "%time%" == "2" (
+	set realtime=2700
+	goto NOTIMEOPTION
+)
+if "%time%" == "3" (
+	set realtime=3600
+	goto NOTIMEOPTION
+)
+if "%time%" == "4" (
+	set realtime=5400
+	goto NOTIMEOPTION
+)
+if "%time%" == "5" (
+	set realtime=7200
+	goto NOTIMEOPTION
+)
+
+:TIMEOPTION
+
+set /p timeoption=Enter time options [M]inute | [S]econd (Default)
+
+if "%timeoption%" == "M" (
+	set multiplier=3600
+
+	@echo Time now calculate in minute
+)
+if "%timeoption%" == "m" (
+	set multiplier=3600
+)
+
+:NOTIMEOPTION
+
+set /a realtime=%time%*%multiplier%
+
 
 set time=!realtime!
 
@@ -104,7 +141,7 @@ for /f "tokens=1*" %%A in ('
 
 timeout /nobreak !realtime!
 
-rundll32.exe user32.dll,LockWorkStation
+rem rundll32.exe user32.dll,LockWorkStation
 
 rem Ask the user if the script should continue
 :ASKCONTINUE
@@ -121,7 +158,7 @@ else(
 Invalid input! Please enter 'Y' or 'N'.^
 
 
-	goto ASKCONTINUEgit a
+	goto ASKCONTINUE
 )
 
 rem Fallback option
