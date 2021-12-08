@@ -96,7 +96,7 @@ goto TIMEOPTION
 
 :TIMEOPTION
 
-set /p timeoption="Enter time options [M]inute | [S]econd(Default): "
+set /p timeoption="Enter time options [M]inute | [S]econd (Default): "
 
 if "%timeoption%" == "M" (
 	set multiplier=60
@@ -152,7 +152,7 @@ for /f "tokens=1*" %%A in ('
 
 timeout /nobreak !realtime!
 
-rem rundll32.exe user32.dll,LockWorkStation
+rundll32.exe user32.dll,LockWorkStation
 
 rem Ask the user if the script should continue
 :ASKCONTINUE
