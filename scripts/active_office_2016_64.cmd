@@ -9,4 +9,4 @@ cscript OSPP.VBS /act
 cscript OSPP.VBS /dstatus
 
 cls
-echo "Have a good day. SaltyTuna"
+@echo Have a good day. SaltyTuna
